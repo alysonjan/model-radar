@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #060708;
+  --color-panel: #0b0d11;
+  --color-panel2: #0f1217;
+  --color-line: #1c2129;
+  --color-line2: #262c36;
+  --color-dim: #7b8492;
+  --color-mute: #9aa3b2;
+  --color-fg: #e9ecf1;
+  --color-accent: #2dd4bf;
+}
+
+/* RGB triplet for the accent, so alpha variants can be composed in inline
+   styles and SVG: rgb(var(--accent-rgb) / 0.25). Change both lines together. */
+:root {
+  --accent-rgb: 45 212 191;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+  background: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #060708;
+}
+
+/* --- surfaces ------------------------------------------------------- */
+.panel {
+  position: relative;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0) 42%),
+    var(--color-panel);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 24px 60px -40px rgba(0, 0, 0, 0.9);
+}
+
+.panel-flat {
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-panel);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7f8896;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--color-mute);
+  background: rgba(255, 255, 255, 0.018);
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.chip:hover {
+  color: var(--color-fg);
+  border-color: var(--color-line2);
+}
+
+.chip[data-on="true"] {
+  color: #060708;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.chip-static {
+  cursor: default;
+}
+
+/* --- texture / glow ------------------------------------------------- */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 78%);
+}
+
+/* --- scrollbars ----------------------------------------------------- */
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2b323d transparent;
+}
+.scroll-x::-webkit-scrollbar {
+  height: 6px;
+}
+.scroll-x::-webkit-scrollbar-thumb {
+  background: #2b323d;
+  border-radius: 99px;
+}
+.fade-r {
+  mask-image: linear-gradient(to right, #000 94%, transparent);
+}
+
+@media (min-width: 1024px) {
+  .wrap-lg {
+    flex-wrap: wrap;
+    overflow: visible;
+    mask-image: none;
+  }
+}
+
+/* --- motion --------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes live-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0.55);
+  }
+  60% {
+    opacity: 0.65;
+    box-shadow: 0 0 0 5px rgb(var(--accent-rgb) / 0);
+  }
+}
+.live-dot {
+  animation: live-dot 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .live-dot {
+    animation: none;
+  }
+}
+
+/* --- drawer --------------------------------------------------------- */
+@keyframes slide-in {
+  from {
+    transform: translateX(28px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.drawer {
+  animation: slide-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fade-in 0.2s ease both;
+}
+
+/* --- table ---------------------------------------------------------- */
+.tbl th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #0b0d11f2;
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+  font-weight: 500;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-line);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+.tbl th:hover {
+  color: var(--color-mute);
+}
+.tbl td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #14181e;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.tbl tbody tr {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.tbl tbody tr:hover {
+  background: rgba(255, 255, 255, 0.024);
+}
+.tbl tbody tr[data-sel="true"] {
+  background: rgb(var(--accent-rgb) / 0.055);
+}
+
+.tbl tr.group-row td {
+  padding: 13px 12px;
+  border-top: 2px solid #2f3742;
+  border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+.tbl tr.group-row:hover {
+  background: #12161c;
+}
+
+/* focus */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
